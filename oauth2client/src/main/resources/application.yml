@@ -1,0 +1,10 @@
+
+oauth2:
+  clients:
+     clientDetails:
+        -
+           clientId: employee
+           clientSecret: secret
+        -
+           clientId: defg
+           clientSecret: 1234
