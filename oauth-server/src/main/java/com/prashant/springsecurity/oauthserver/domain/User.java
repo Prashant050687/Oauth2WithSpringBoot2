@@ -1,10 +1,5 @@
 package com.prashant.springsecurity.oauthserver.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import java.io.Serializable;
 import java.util.Collection;
 
@@ -21,10 +16,12 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
 @Table(name = "USER_", uniqueConstraints = { @UniqueConstraint(columnNames = { "USER_NAME" }) })
-public class User implements UserDetails, Serializable {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,23 +34,16 @@ public class User implements UserDetails, Serializable {
     @Column(name = "PASSWORD")
     private String password;
 
-    @Column(name = "ACCOUNT_EXPIRED")
-    private boolean accountExpired;
 
-    @Column(name = "ACCOUNT_LOCKED")
-    private boolean accountLocked;
-
-    @Column(name = "CREDENTIALS_EXPIRED")
-    private boolean credentialsExpired;
 
     @Column(name = "ENABLED")
     private boolean enabled;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "USERS_AUTHORITIES", joinColumns = @JoinColumn(name = "USER_ID", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "AUTHORITY_ID", referencedColumnName = "ID"))
+    @JoinTable(name = "USERS_ROLES", joinColumns = @JoinColumn(name = "USER_ID", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID"))
     @OrderBy
     @JsonIgnore
-    private Collection<Authority> authorities;
+    private Collection<Role> roles;
 
 
 	public Long getId() {
@@ -64,29 +54,7 @@ public class User implements UserDetails, Serializable {
 		this.id = id;
 	}
 
-	public boolean isAccountExpired() {
-		return accountExpired;
-	}
-
-	public void setAccountExpired(boolean accountExpired) {
-		this.accountExpired = accountExpired;
-	}
-
-	public boolean isAccountLocked() {
-		return accountLocked;
-	}
-
-	public void setAccountLocked(boolean accountLocked) {
-		this.accountLocked = accountLocked;
-	}
-
-	public boolean isCredentialsExpired() {
-		return credentialsExpired;
-	}
-
-	public void setCredentialsExpired(boolean credentialsExpired) {
-		this.credentialsExpired = credentialsExpired;
-	}
+	
 
 	public void setUsername(String username) {
 		this.username = username;
@@ -100,47 +68,29 @@ public class User implements UserDetails, Serializable {
 		this.enabled = enabled;
 	}
 
-	public void setAuthorities(Collection<Authority> authorities) {
-		this.authorities = authorities;
+	public Collection<Role> getRoles() {
+		return roles;
 	}
 
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return authorities;
+	public void setRoles(Collection<Role> roles) {
+		this.roles = roles;
 	}
 
-	@Override
+	public String getUsername() {
+		return username;
+	}
+
 	public String getPassword() {
 		return password;
 	}
 
-	@Override
-	public String getUsername() {
-		// TODO Auto-generated method stub
-		return username;
-	}
-
-	@Override
 	public boolean isEnabled() {
 		return enabled;
 	}
 	
 	
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return !isAccountExpired();
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return !isAccountLocked();
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return !isCredentialsExpired();
-    }
+	
 
 	
 	
