@@ -1,0 +1,41 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: auth-server-service
+spec:
+  selector:
+    app: oauth-server
+  ports:
+    - protocol: "TCP"
+      # Port accessible inside cluster
+      port: 7777
+      # Port to forward to inside the pod
+      targetPort: 7777
+      # Port accessible outside cluster
+      nodePort: 30001
+  type: LoadBalancer
+
+
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oauth-server-deployment
+spec:
+  selector:
+    matchLabels:
+        app: oauth-server
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: oauth-server
+    spec:
+      containers:
+        - name: oauth-server
+          image: prashantdocker87/oauth-server:one
+          #same port as mentioned in applciations application.properties
+          ports:
+            - containerPort: 7777

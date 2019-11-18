@@ -44,8 +44,6 @@ public class OAuth2AuthorizationServerConfigJwt extends AuthorizationServerConfi
 
 	@Autowired
 	DataSource dataSource;
-	  
-	   
 
 	@Autowired
 	SecurityProperties securityProperties;
@@ -55,28 +53,7 @@ public class OAuth2AuthorizationServerConfigJwt extends AuthorizationServerConfi
 		oauthServer.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()");
 	}
 
-	/*
-	 @Override
-	    public void configure(final ClientDetailsServiceConfigurer clients) throws Exception { // @formatter:off
-	        clients.inMemory()
-	                .withClient("fooClientIdPassword")
-	                .secret(passwordEncoder().encode("secret"))
-	                .authorizedGrantTypes("password", "authorization_code", "refresh_token", "client_credentials")
-	                .scopes("foo", "read", "write")
-	                .accessTokenValiditySeconds(3600)       // 1 hour
-	                .refreshTokenValiditySeconds(2592000)  // 30 days
-	                .and()
-	                .withClient("barClientIdPassword")
-	                .secret(passwordEncoder().encode("secret"))
-	                .authorizedGrantTypes("password", "authorization_code", "refresh_token")
-	                .scopes("bar", "read", "write")
-	                .accessTokenValiditySeconds(3600)       // 1 hour
-	                .refreshTokenValiditySeconds(2592000)  // 30 days
-	                
-	        
-	    } // @formatter:on
 	
-	*/
 	/**
 	 * Fetch client details from database ie <b>oauth_client_details</b> table.
 	 */
@@ -143,5 +120,28 @@ public class OAuth2AuthorizationServerConfigJwt extends AuthorizationServerConfi
 	private KeyStoreKeyFactory keyStoreKeyFactory(SecurityProperties.JwtProperties jwtProperties) {
 		return new KeyStoreKeyFactory(jwtProperties.getKeyStore(), jwtProperties.getKeyStorePassword().toCharArray());
 	}
+	
+	/*
+	 @Override
+	    public void configure(final ClientDetailsServiceConfigurer clients) throws Exception { // @formatter:off
+	        clients.inMemory()
+	                .withClient("fooClientIdPassword")
+	                .secret(passwordEncoder().encode("secret"))
+	                .authorizedGrantTypes("password", "authorization_code", "refresh_token", "client_credentials")
+	                .scopes("foo", "read", "write")
+	                .accessTokenValiditySeconds(3600)       // 1 hour
+	                .refreshTokenValiditySeconds(2592000)  // 30 days
+	                .and()
+	                .withClient("barClientIdPassword")
+	                .secret(passwordEncoder().encode("secret"))
+	                .authorizedGrantTypes("password", "authorization_code", "refresh_token")
+	                .scopes("bar", "read", "write")
+	                .accessTokenValiditySeconds(3600)       // 1 hour
+	                .refreshTokenValiditySeconds(2592000)  // 30 days
+	                
+	        
+	    } // @formatter:on
+	
+	*/
 
 }

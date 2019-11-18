@@ -19,6 +19,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Qualifier("userDetailsService")
     UserDetailsService userdetailsService;
 
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userdetailsService).passwordEncoder(passwordEncoder);
+    }
+    
+    @Override
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+    
+
     /*
     
     @Autowired
@@ -32,24 +44,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	System.out.println("Encoding for password"+passwordEncoder.encode("secret"));
     }// @formatter:on
 	*/
-    
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-
-        auth.userDetailsService(userdetailsService).passwordEncoder(passwordEncoder);
-
-    }
-    
-    @Override
-    @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
-    
-
-    
-    
-
    
 
 }
