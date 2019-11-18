@@ -15,7 +15,7 @@ spec:
       targetPort: 7003
       # Port accessible outside cluster
       nodePort: 30002
-  type: LoadBalancer
+  type: NodePort
 
 
 
