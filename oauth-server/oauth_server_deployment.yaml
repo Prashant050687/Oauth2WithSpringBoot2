@@ -5,6 +5,7 @@ metadata:
   name: auth-server-service
 spec:
   selector:
+    # Should match the template.metadata.labels.app value
     app: oauth-server
   ports:
     - protocol: "TCP"

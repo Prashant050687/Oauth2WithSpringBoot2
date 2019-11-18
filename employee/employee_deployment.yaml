@@ -5,6 +5,7 @@ metadata:
   name: employee-service
 spec:
   selector:
+     # Should match the template.metadata.labels.app value
     app: employee
   ports:
     - protocol: "TCP"
