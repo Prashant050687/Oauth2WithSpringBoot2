@@ -10,11 +10,12 @@ spec:
   ports:
     - protocol: "TCP"
       # Port accessible inside cluster
-      port: 7777
+      port: 80
       # Port to forward to inside the pod
       targetPort: 7777
       # Port accessible outside cluster
       nodePort: 30001
+      name: http
   type: NodePort
 
 
