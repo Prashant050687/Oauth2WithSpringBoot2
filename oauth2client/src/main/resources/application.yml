@@ -1,5 +1,7 @@
 
 oauth2:
+  server: 
+     uri: ${OAUTH_SERVER_URI:http://localhost:7777/oauth/}
   clients:
      clientDetails:
         -
@@ -8,3 +10,5 @@ oauth2:
         -
            clientId: defg
            clientSecret: 1234
+           
+  

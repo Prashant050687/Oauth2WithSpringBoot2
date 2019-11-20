@@ -1,16 +1,29 @@
 package com.prashant.oauth2client.rest;
 
+/**
+ * Dto to capture token request.
+ * @author prashant
+ *
+ */
 public class TokenRequest {
-	String clientId;
+  String clientId;
 
-	public String getClientId() {
-		return clientId;
-	}
+  String refreshToken;
 
-	public void setClientId(String clientId) {
-		this.clientId = clientId;
-	}
+  public String getClientId() {
+    return clientId;
+  }
 
-	
+  public void setClientId(String clientId) {
+    this.clientId = clientId;
+  }
+
+  public String getRefreshToken() {
+    return refreshToken;
+  }
+
+  public void setRefreshToken(String refreshToken) {
+    this.refreshToken = refreshToken;
+  }
 
 }
