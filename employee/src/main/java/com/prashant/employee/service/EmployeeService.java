@@ -15,42 +15,47 @@ import com.prashant.employee.dto.EmployeeDTO;
 import com.prashant.employee.exception.BusinessException;
 import com.prashant.employee.repo.EmployeeRepo;
 
+/**
+ * Employee Service class
+ * @author prashant
+ *
+ */
 @Service
 public class EmployeeService {
 
-	@Autowired
-	EmployeeRepo employeeRepo;
+  @Autowired
+  EmployeeRepo employeeRepo;
 
-	@Autowired
-	@Qualifier("dozerWithMapping")
-	DozerBeanMapper dozerWithMapping;
+  @Autowired
+  @Qualifier("dozerWithMapping")
+  DozerBeanMapper dozerWithMapping;
 
-	@Transactional(readOnly = true)
-	@PreAuthorize("hasAuthority('READ_EMPLOYEE')")
-	public EmployeeDTO findEmployeeById(Long employeeId) {
-		Employee employee = employeeRepo.findById(employeeId).orElse(null);
-		if (employee == null) {
-			throw new BusinessException("Employee Not Found", "Employee with id: " + employeeId + " not found");
-		} else {
-			return dozerWithMapping.map(employee, EmployeeDTO.class);
-		}
-	}
+  @Transactional(readOnly = true)
+  @PreAuthorize("hasAuthority('READ_EMPLOYEE')")
+  public EmployeeDTO findEmployeeById(Long employeeId) {
+    Employee employee = employeeRepo.findById(employeeId).orElse(null);
+    if (employee == null) {
+      throw new BusinessException("Employee Not Found", "Employee with id: " + employeeId + " not found");
+    } else {
+      return dozerWithMapping.map(employee, EmployeeDTO.class);
+    }
+  }
 
-	@Transactional(readOnly = true)
-	@PreAuthorize("hasAuthority('READ_ALL_EMPLOYEE')")
-	public Page<EmployeeDTO> findAllEmployees(Pageable pageable) {
-		Page<Employee> employees = employeeRepo.findAll(pageable);
-		return employees.map(this::convertDtoPage);
-	}
+  @Transactional(readOnly = true)
+  @PreAuthorize("hasAuthority('READ_ALL_EMPLOYEE')")
+  public Page<EmployeeDTO> findAllEmployees(Pageable pageable) {
+    Page<Employee> employees = employeeRepo.findAll(pageable);
+    return employees.map(this::convertDtoPage);
+  }
 
-	private EmployeeDTO convertDtoPage(Employee employee) {
-		return dozerWithMapping.map(employee, EmployeeDTO.class);
-	}
+  private EmployeeDTO convertDtoPage(Employee employee) {
+    return dozerWithMapping.map(employee, EmployeeDTO.class);
+  }
 
-	@Transactional(propagation = Propagation.REQUIRED)
-	@PreAuthorize("hasAuthority('CREATE_EMPLOYEE')")
-	public void createEmployee(EmployeeDTO employeeDTO) {
-		employeeRepo.save(dozerWithMapping.map(employeeDTO, Employee.class));
-	}
+  @Transactional(propagation = Propagation.REQUIRED)
+  @PreAuthorize("hasAuthority('CREATE_EMPLOYEE')")
+  public void createEmployee(EmployeeDTO employeeDTO) {
+    employeeRepo.save(dozerWithMapping.map(employeeDTO, Employee.class));
+  }
 
 }

@@ -3,73 +3,76 @@ package com.prashant.employee.dto;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+/**
+ * Base DTO for entities.
+ * @author prashant
+ *
+ */
 public abstract class BaseDTO implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4892429106877616449L;
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 4892429106877616449L;
 
-	private Long id;
+  private Long id;
 
-	int version;
+  int version;
 
-	String createdBy;
+  String createdBy;
 
-	String modifiedBy;
+  String modifiedBy;
 
-	LocalDateTime modifiedDateTime;
+  LocalDateTime modifiedDateTime;
 
-	LocalDateTime createdDateTime;
-	
-	
+  LocalDateTime createdDateTime;
 
-	public Long getId() {
-		return id;
-	}
+  public Long getId() {
+    return id;
+  }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-	public String getCreatedBy() {
-		return createdBy;
-	}
+  public String getCreatedBy() {
+    return createdBy;
+  }
 
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
+  public void setCreatedBy(String createdBy) {
+    this.createdBy = createdBy;
+  }
 
-	public String getModifiedBy() {
-		return modifiedBy;
-	}
+  public String getModifiedBy() {
+    return modifiedBy;
+  }
 
-	public void setModifiedBy(String modifiedBy) {
-		this.modifiedBy = modifiedBy;
-	}
+  public void setModifiedBy(String modifiedBy) {
+    this.modifiedBy = modifiedBy;
+  }
 
-	public int getVersion() {
-		return version;
-	}
+  public int getVersion() {
+    return version;
+  }
 
-	public void setVersion(int version) {
-		this.version = version;
-	}
+  public void setVersion(int version) {
+    this.version = version;
+  }
 
-	public LocalDateTime getModifiedDateTime() {
-		return modifiedDateTime;
-	}
+  public LocalDateTime getModifiedDateTime() {
+    return modifiedDateTime;
+  }
 
-	public void setModifiedDateTime(LocalDateTime modifiedDateTime) {
-		this.modifiedDateTime = modifiedDateTime;
-	}
+  public void setModifiedDateTime(LocalDateTime modifiedDateTime) {
+    this.modifiedDateTime = modifiedDateTime;
+  }
 
-	public LocalDateTime getCreatedDateTime() {
-		return createdDateTime;
-	}
+  public LocalDateTime getCreatedDateTime() {
+    return createdDateTime;
+  }
 
-	public void setCreatedDateTime(LocalDateTime createdDateTime) {
-		this.createdDateTime = createdDateTime;
-	}
+  public void setCreatedDateTime(LocalDateTime createdDateTime) {
+    this.createdDateTime = createdDateTime;
+  }
 
 }

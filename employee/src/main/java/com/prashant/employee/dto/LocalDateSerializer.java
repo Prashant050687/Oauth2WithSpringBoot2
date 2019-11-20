@@ -8,6 +8,11 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
+/**
+ * Date serializer to conver localdate to json.
+ * @author prashant
+ *
+ */
 public class LocalDateSerializer extends StdSerializer<LocalDate> {
 
   /**

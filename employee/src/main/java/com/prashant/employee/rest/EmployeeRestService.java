@@ -18,29 +18,34 @@ import org.springframework.http.ResponseEntity;
 import com.prashant.employee.dto.EmployeeDTO;
 import com.prashant.employee.service.EmployeeService;
 
+/**
+ * Rest controller for employee
+ * @author prashant
+ *
+ */
 @RestController
 @RequestMapping("/employee")
 public class EmployeeRestService {
 
-	@Autowired
-	EmployeeService employeeService;
+  @Autowired
+  EmployeeService employeeService;
 
-	@GetMapping(value = "/all")
-	public ResponseEntity<Page<EmployeeDTO>> findAllEmployees(Pageable pageable) {
-		return ResponseEntity.ok(employeeService.findAllEmployees(pageable));
+  @GetMapping(value = "/all")
+  public ResponseEntity<Page<EmployeeDTO>> findAllEmployees(Pageable pageable) {
+    return ResponseEntity.ok(employeeService.findAllEmployees(pageable));
 
-	}
+  }
 
-	@GetMapping(value = "/{id}")
-	public ResponseEntity<EmployeeDTO> findAllEmployeeById(@PathVariable Long id) {
-		return ResponseEntity.ok(employeeService.findEmployeeById(id));
+  @GetMapping(value = "/{id}")
+  public ResponseEntity<EmployeeDTO> findAllEmployeeById(@PathVariable Long id) {
+    return ResponseEntity.ok(employeeService.findEmployeeById(id));
 
-	}
+  }
 
-	@PostMapping(value = "/create")
-	public ResponseEntity<Void> createEmployee(  @Valid @RequestBody EmployeeDTO employee) {
-		employeeService.createEmployee(employee);
-		return new ResponseEntity<>(HttpStatus.ACCEPTED);
+  @PostMapping(value = "/create")
+  public ResponseEntity<Void> createEmployee(@Valid @RequestBody EmployeeDTO employee) {
+    employeeService.createEmployee(employee);
+    return new ResponseEntity<>(HttpStatus.ACCEPTED);
 
-	}
+  }
 }

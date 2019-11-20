@@ -1,5 +1,10 @@
 package com.prashant.employee.exception;
 
+/**
+ * Custom Business Exception class.
+ * @author prashant
+ *
+ */
 public class BusinessException extends RuntimeException {
 
   /**

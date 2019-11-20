@@ -13,47 +13,53 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
+/**
+ * Resource server configuration .
+ * The class will be responsible to register the token store which will be used
+ * to validate and interpret the Json Web token.
+ * @author prashant
+ *
+ */
 @Configuration
 @EnableResourceServer
 public class OAuth2ResourceServerConfigJwt extends ResourceServerConfigurerAdapter {
 
-	@Value("${security.oauth2.resource.jwt.keyValue}")
-	String oauthPublicKey;
-	
-	
-	@Override
-	public void configure(final ResourceServerSecurityConfigurer resources) throws Exception {
-		resources.tokenStore(tokenStore());
-	}
+  @Value("${security.oauth2.resource.jwt.keyValue}")
+  String oauthPublicKey;
 
-	@Bean
-	@Primary
-	public DefaultTokenServices tokenServices() {
-		final DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
-		defaultTokenServices.setTokenStore(tokenStore());
-		defaultTokenServices.setSupportRefreshToken(true);
-		return defaultTokenServices;
-	}
+  @Override
+  public void configure(final ResourceServerSecurityConfigurer resources) throws Exception {
+    resources.tokenStore(tokenStore());
+  }
 
-	@Bean
-	public TokenStore tokenStore() {
-		return new JwtTokenStore(accessTokenConverter());
-	}
+  @Bean
+  @Primary
+  public DefaultTokenServices tokenServices() {
+    final DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
+    defaultTokenServices.setTokenStore(tokenStore());
+    defaultTokenServices.setSupportRefreshToken(true);
+    return defaultTokenServices;
+  }
 
-	@Bean
-	public JwtAccessTokenConverter accessTokenConverter() {
-		final JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-		converter.setVerifierKey(getPublicKeyAsString());
-		
-		return converter;
-	}
+  @Bean
+  public TokenStore tokenStore() {
+    return new JwtTokenStore(accessTokenConverter());
+  }
 
-	private String getPublicKeyAsString() {
-		return oauthPublicKey;
-	}
+  @Bean
+  public JwtAccessTokenConverter accessTokenConverter() {
+    final JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+    converter.setVerifierKey(getPublicKeyAsString());
 
-	@Bean
-	public BCryptPasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+    return converter;
+  }
+
+  private String getPublicKeyAsString() {
+    return oauthPublicKey;
+  }
+
+  @Bean
+  public BCryptPasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 }

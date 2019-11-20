@@ -7,6 +7,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 
+/**
+ * Starting point for employee microservice
+ * @author prashant
+ *
+ */
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.prashant.employee"})
 @EntityScan(basePackages = {"com.prashant.employee.domain", "org.springframework.data.jpa.convert.threeten"})
@@ -14,8 +19,8 @@ import org.springframework.data.web.config.EnableSpringDataWebSupport;
 @EnableSpringDataWebSupport
 public class EmployeeApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(EmployeeApplication.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(EmployeeApplication.class, args);
+  }
 
 }
