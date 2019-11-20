@@ -1,11 +1,14 @@
 package com.prashant.oauth2client.rest;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Dto to capture token request.
  * @author prashant
  *
  */
 public class TokenRequest {
+  @NotNull(message = "Client Id cannot be null")
   String clientId;
 
   String refreshToken;

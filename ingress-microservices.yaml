@@ -25,5 +25,11 @@ spec:
            # Service name and port from employee_deployment.yaml
           serviceName: auth-server-service
           #points to port attribute of service
-          servicePort: 80       
+          servicePort: 80
+      - path: /authclient/?(.+)
+       #points to port attribute of service
+        backend:
+           # Service name and port from oauth_server_deployment.yaml
+          serviceName: auth-client-service
+          servicePort: 80          
       

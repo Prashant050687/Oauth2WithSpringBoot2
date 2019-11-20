@@ -1,5 +1,7 @@
 package com.prashant.oauth2client.rest;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -9,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.support.BasicAuthenticationInterceptor;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +27,7 @@ import com.prashant.oauth2client.util.OauthClientUtils;
  *
  */
 @RestController
-@RequestMapping("/oauth2")
+@RequestMapping("/oauthclient")
 public class Oauth2ClientRestController {
 
   @Value("${oauth2.server.uri}")
@@ -37,7 +40,7 @@ public class Oauth2ClientRestController {
   OauthClientDetailsConfig oauthClientDetailsConfig;
 
   @PostMapping("/accesstoken")
-  public Object getAccessToken(TokenRequest tokenRequest, @RequestHeader("Authorization") String authHeader) {
+  public Object getAccessToken(@RequestBody @Valid TokenRequest tokenRequest, @RequestHeader("Authorization") String authHeader) {
 
     restTemplate.getInterceptors().add(new BasicAuthenticationInterceptor(tokenRequest.getClientId(),
       oauthClientDetailsConfig.getClientDetailsMap().get(tokenRequest.getClientId()).getClientSecret()));
@@ -47,7 +50,7 @@ public class Oauth2ClientRestController {
   }
 
   @PostMapping("/refreshtoken")
-  public Object getRefreshToken(TokenRequest tokenRequest) {
+  public Object getRefreshToken(@RequestBody @Valid TokenRequest tokenRequest) {
 
     restTemplate.getInterceptors().add(new BasicAuthenticationInterceptor(tokenRequest.getClientId(),
       oauthClientDetailsConfig.getClientDetailsMap().get(tokenRequest.getClientId()).getClientSecret()));
