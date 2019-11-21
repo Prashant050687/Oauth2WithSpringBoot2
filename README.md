@@ -14,4 +14,4 @@ The oauth client is a helper microservice to interact with the oauth server so t
 
 # Blog
 More details can be found on the following blog:
-https://prashanthariharan.wixsite.com/mysite/post/springboot-microservices
+https://prashanthariharan.wixsite.com/prashant/post/springboot-microservices
