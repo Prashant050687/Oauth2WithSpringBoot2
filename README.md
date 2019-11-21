@@ -11,3 +11,7 @@ The oauth server stores the user,role and permissions data and is also responsib
 
 # Oauth Client
 The oauth client is a helper microservice to interact with the oauth server so that client secrets dont have to be stored on the client side. 
+
+# Blog
+More details can be found on the following blog:
+https://prashanthariharan.wixsite.com/mysite/post/springboot-microservices
