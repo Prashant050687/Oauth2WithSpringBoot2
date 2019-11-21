@@ -43,5 +43,5 @@ spec:
             - containerPort: 7004
           env:
             - name: oauth2.server.uri
-              value: http://172.17.128.125:80/auth/oauth/
+              value: http://${AUTH-SERVER-SERVICE_SERVICE_HOST}:80/oauth/
           
