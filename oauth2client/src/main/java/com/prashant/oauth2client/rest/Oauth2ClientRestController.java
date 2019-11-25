@@ -20,6 +20,8 @@ import org.springframework.web.client.RestTemplate;
 import com.prashant.oauth2client.OauthClientDetailsConfig;
 import com.prashant.oauth2client.util.OauthClientUtils;
 
+import io.swagger.annotations.Api;
+
 /**
  * Rest controller for the oauth client. This takes the request and delegates it to the 
  * Oauth server to fetch the access token.
@@ -28,6 +30,7 @@ import com.prashant.oauth2client.util.OauthClientUtils;
  */
 @RestController
 @RequestMapping("/oauthclient")
+@Api(value = "Oauth Client Microservice", description = "Operations pertaining to fetching and refresing tokens from OauthServer")
 public class Oauth2ClientRestController {
 
   @Value("${oauth2.server.uri}")
