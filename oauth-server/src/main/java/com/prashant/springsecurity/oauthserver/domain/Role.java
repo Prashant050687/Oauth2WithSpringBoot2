@@ -17,47 +17,51 @@ import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/**
+ * Role entity
+ * @author prashant
+ *
+ */
 @Entity
-@Table(name = "ROLE_", uniqueConstraints = { @UniqueConstraint(columnNames = { "NAME" }) })
+@Table(name = "ROLE_", uniqueConstraints = {@UniqueConstraint(columnNames = {"NAME"})})
 public class Role {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "ID")
-	private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "ID")
+  private Long id;
 
-	@Column(name = "NAME")
-	private String name;
+  @Column(name = "NAME")
+  private String name;
 
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "ROLES_AUTHORITIES", joinColumns = @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "AUTHORITY_ID", referencedColumnName = "ID"))
-	@OrderBy
-	@JsonIgnore
-	private Collection<Authority> authorities;
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(name = "ROLES_AUTHORITIES", joinColumns = @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID"),
+    inverseJoinColumns = @JoinColumn(name = "AUTHORITY_ID", referencedColumnName = "ID"))
+  @OrderBy
+  @JsonIgnore
+  private Collection<Authority> authorities;
 
-	public Long getId() {
-		return id;
-	}
+  public Long getId() {
+    return id;
+  }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-	public String getName() {
-		return name;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	public Collection<Authority> getAuthorities() {
-		return authorities;
-	}
+  public Collection<Authority> getAuthorities() {
+    return authorities;
+  }
 
-	public void setAuthorities(Collection<Authority> authorities) {
-		this.authorities = authorities;
-	}
-	
-	
+  public void setAuthorities(Collection<Authority> authorities) {
+    this.authorities = authorities;
+  }
 
 }

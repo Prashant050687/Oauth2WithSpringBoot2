@@ -28,120 +28,124 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 
+/**
+ * Sets up Oauth2 authentication and configurations for generating JWT tokens and fetching list of roles for the user.
+ * @author prashant
+ *
+ */
 @Configuration
 @EnableAuthorizationServer
 @EnableResourceServer
 @EnableConfigurationProperties(SecurityProperties.class)
 public class OAuth2AuthorizationServerConfigJwt extends AuthorizationServerConfigurerAdapter {
 
-	@Autowired
-	@Qualifier("authenticationManagerBean")
-	private AuthenticationManager authenticationManager;
+  @Autowired
+  @Qualifier("authenticationManagerBean")
+  private AuthenticationManager authenticationManager;
 
-	@Autowired
-	@Qualifier("userDetailsService")
-	UserDetailsService userDetailsService;
+  @Autowired
+  @Qualifier("userDetailsService")
+  UserDetailsService userDetailsService;
 
-	@Autowired
-	DataSource dataSource;
+  @Autowired
+  DataSource dataSource;
 
-	@Autowired
-	SecurityProperties securityProperties;
+  @Autowired
+  SecurityProperties securityProperties;
 
-	@Override
-	public void configure(final AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
-		oauthServer.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()");
-	}
+  @Override
+  public void configure(final AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
+    oauthServer.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()");
+  }
 
-	
-	/**
-	 * Fetch client details from database ie <b>oauth_client_details</b> table.
-	 */
-	@Override
-	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		clients.jdbc(dataSource);
-	}
-	
-	@Bean
-	@Primary
-	public DefaultTokenServices tokenServices() {
-		final DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
-		defaultTokenServices.setTokenStore(tokenStore());
-		defaultTokenServices.setSupportRefreshToken(true);
-		return defaultTokenServices;
-	}
+  /**
+   * Fetch client details from database ie <b>oauth_client_details</b> table.
+   */
+  @Override
+  public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+    clients.jdbc(dataSource);
+  }
 
-	/**
-	 * Register token store authentication manager and user details service
-	 */
-	@Override
-	public void configure(final AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-		final TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
-		tokenEnhancerChain.setTokenEnhancers(Arrays.asList(tokenEnhancer(), accessTokenConverter()));
-		endpoints.tokenStore(tokenStore()).tokenEnhancer(tokenEnhancerChain)
-				.authenticationManager(authenticationManager);
-		endpoints.userDetailsService(userDetailsService);
-	}
+  @Bean
+  @Primary
+  public DefaultTokenServices tokenServices() {
+    final DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
+    defaultTokenServices.setTokenStore(tokenStore());
+    defaultTokenServices.setSupportRefreshToken(true);
+    return defaultTokenServices;
+  }
 
-	@Bean
-	public TokenStore tokenStore() {
-		return new JwtTokenStore(accessTokenConverter());
-	}
+  /**
+   * Register token store authentication manager and user details service
+   */
+  @Override
+  public void configure(final AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+    final TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
+    tokenEnhancerChain.setTokenEnhancers(Arrays.asList(tokenEnhancer(), accessTokenConverter()));
+    endpoints.tokenStore(tokenStore()).tokenEnhancer(tokenEnhancerChain)
+      .authenticationManager(authenticationManager);
+    endpoints.userDetailsService(userDetailsService);
+  }
 
-	/**
-	 * Bean to create a token converter which extracts the private and public key from the keystore.
-	 */
-	@Bean
-	public JwtAccessTokenConverter accessTokenConverter() {
-		final JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+  @Bean
+  public TokenStore tokenStore() {
+    return new JwtTokenStore(accessTokenConverter());
+  }
 
-		SecurityProperties.JwtProperties jwtProperties = securityProperties.getJwt();
-		KeyPair keyPair = keyPair(jwtProperties, keyStoreKeyFactory(jwtProperties));
-		converter.setKeyPair(keyPair);
+  /**
+   * Bean to create a token converter which extracts the private and public key from the keystore.
+   */
+  @Bean
+  public JwtAccessTokenConverter accessTokenConverter() {
+    final JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
 
-		return converter;
-	}
+    SecurityProperties.JwtProperties jwtProperties = securityProperties.getJwt();
+    KeyPair keyPair = keyPair(jwtProperties, keyStoreKeyFactory(jwtProperties));
+    converter.setKeyPair(keyPair);
 
-	@Bean
-	public TokenEnhancer tokenEnhancer() {
-		return new CustomTokenEnhancer();
-	}
+    return converter;
+  }
 
-	@Bean
-	public BCryptPasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+  @Bean
+  public TokenEnhancer tokenEnhancer() {
+    return new CustomTokenEnhancer();
+  }
 
-	private KeyPair keyPair(SecurityProperties.JwtProperties jwtProperties, KeyStoreKeyFactory keyStoreKeyFactory) {
-		return keyStoreKeyFactory.getKeyPair(jwtProperties.getKeyPairAlias(),
-				jwtProperties.getKeyPairPassword().toCharArray());
-	}
+  @Bean
+  public BCryptPasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 
-	private KeyStoreKeyFactory keyStoreKeyFactory(SecurityProperties.JwtProperties jwtProperties) {
-		return new KeyStoreKeyFactory(jwtProperties.getKeyStore(), jwtProperties.getKeyStorePassword().toCharArray());
-	}
-	
-	/*
-	 @Override
-	    public void configure(final ClientDetailsServiceConfigurer clients) throws Exception { // @formatter:off
-	        clients.inMemory()
-	                .withClient("fooClientIdPassword")
-	                .secret(passwordEncoder().encode("secret"))
-	                .authorizedGrantTypes("password", "authorization_code", "refresh_token", "client_credentials")
-	                .scopes("foo", "read", "write")
-	                .accessTokenValiditySeconds(3600)       // 1 hour
-	                .refreshTokenValiditySeconds(2592000)  // 30 days
-	                .and()
-	                .withClient("barClientIdPassword")
-	                .secret(passwordEncoder().encode("secret"))
-	                .authorizedGrantTypes("password", "authorization_code", "refresh_token")
-	                .scopes("bar", "read", "write")
-	                .accessTokenValiditySeconds(3600)       // 1 hour
-	                .refreshTokenValiditySeconds(2592000)  // 30 days
-	                
-	        
-	    } // @formatter:on
-	
-	*/
+  private KeyPair keyPair(SecurityProperties.JwtProperties jwtProperties, KeyStoreKeyFactory keyStoreKeyFactory) {
+    return keyStoreKeyFactory.getKeyPair(jwtProperties.getKeyPairAlias(),
+      jwtProperties.getKeyPairPassword().toCharArray());
+  }
+
+  private KeyStoreKeyFactory keyStoreKeyFactory(SecurityProperties.JwtProperties jwtProperties) {
+    return new KeyStoreKeyFactory(jwtProperties.getKeyStore(), jwtProperties.getKeyStorePassword().toCharArray());
+  }
+
+  /*
+   * @Override
+   * public void configure(final ClientDetailsServiceConfigurer clients) throws Exception { // @formatter:off
+   * clients.inMemory()
+   * .withClient("fooClientIdPassword")
+   * .secret(passwordEncoder().encode("secret"))
+   * .authorizedGrantTypes("password", "authorization_code", "refresh_token", "client_credentials")
+   * .scopes("foo", "read", "write")
+   * .accessTokenValiditySeconds(3600) // 1 hour
+   * .refreshTokenValiditySeconds(2592000) // 30 days
+   * .and()
+   * .withClient("barClientIdPassword")
+   * .secret(passwordEncoder().encode("secret"))
+   * .authorizedGrantTypes("password", "authorization_code", "refresh_token")
+   * .scopes("bar", "read", "write")
+   * .accessTokenValiditySeconds(3600) // 1 hour
+   * .refreshTokenValiditySeconds(2592000) // 30 days
+   * 
+   * 
+   * } // @formatter:on
+   * 
+   */
 
 }

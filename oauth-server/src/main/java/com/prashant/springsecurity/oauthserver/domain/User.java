@@ -18,80 +18,79 @@ import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-
+/**
+ * User Entity
+ * @author prashant
+ *
+ */
 @Entity
-@Table(name = "USER_", uniqueConstraints = { @UniqueConstraint(columnNames = { "USER_NAME" }) })
+@Table(name = "USER_", uniqueConstraints = {@UniqueConstraint(columnNames = {"USER_NAME"})})
 public class User implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Long id;
+  /**
+   * 
+   */
+  private static final long serialVersionUID = -4872293890153197179L;
 
-    @Column(name = "USER_NAME")
-    private String username;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "ID")
+  private Long id;
 
-    @Column(name = "PASSWORD")
-    private String password;
+  @Column(name = "USER_NAME")
+  private String username;
 
+  @Column(name = "PASSWORD")
+  private String password;
 
+  @Column(name = "ENABLED")
+  private boolean enabled;
 
-    @Column(name = "ENABLED")
-    private boolean enabled;
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(name = "USERS_ROLES", joinColumns = @JoinColumn(name = "USER_ID", referencedColumnName = "ID"),
+    inverseJoinColumns = @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID"))
+  @OrderBy
+  @JsonIgnore
+  private Collection<Role> roles;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "USERS_ROLES", joinColumns = @JoinColumn(name = "USER_ID", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID"))
-    @OrderBy
-    @JsonIgnore
-    private Collection<Role> roles;
+  public Long getId() {
+    return id;
+  }
 
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-	public Long getId() {
-		return id;
-	}
+  public void setUsername(String username) {
+    this.username = username;
+  }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+  public void setPassword(String password) {
+    this.password = password;
+  }
 
-	
+  public void setEnabled(boolean enabled) {
+    this.enabled = enabled;
+  }
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+  public Collection<Role> getRoles() {
+    return roles;
+  }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+  public void setRoles(Collection<Role> roles) {
+    this.roles = roles;
+  }
 
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
+  public String getUsername() {
+    return username;
+  }
 
-	public Collection<Role> getRoles() {
-		return roles;
-	}
+  public String getPassword() {
+    return password;
+  }
 
-	public void setRoles(Collection<Role> roles) {
-		this.roles = roles;
-	}
+  public boolean isEnabled() {
+    return enabled;
+  }
 
-	public String getUsername() {
-		return username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public boolean isEnabled() {
-		return enabled;
-	}
-	
-	
-
-	
-
-	
-	
 }

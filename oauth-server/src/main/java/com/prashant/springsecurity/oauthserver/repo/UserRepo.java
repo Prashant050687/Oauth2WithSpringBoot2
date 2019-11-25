@@ -6,10 +6,10 @@ import org.springframework.data.repository.query.Param;
 
 import com.prashant.springsecurity.oauthserver.domain.User;
 
-public interface UserRepo  extends JpaRepository<User, Long>{
+public interface UserRepo extends JpaRepository<User, Long> {
 
-	   @Query("SELECT DISTINCT user FROM User user " +
-	            "INNER JOIN FETCH user.roles AS roles " +
-	            "WHERE user.username = :username")
-	    User findByUsername(@Param("username") String username);
+  @Query("SELECT DISTINCT user FROM User user " +
+    "INNER JOIN FETCH user.roles AS roles " +
+    "WHERE user.username = :username")
+  User findByUsername(@Param("username") String username);
 }
