@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.support.BasicAuthenticationInterceptor;
@@ -48,6 +49,9 @@ public class Oauth2ClientRestController {
     restTemplate.getInterceptors().add(new BasicAuthenticationInterceptor(tokenRequest.getClientId(),
       oauthClientDetailsConfig.getClientDetailsMap().get(tokenRequest.getClientId()).getClientSecret()));
     ResponseEntity<?> response = post(OauthClientUtils.preparePostParametersForPasswordTypeGrant(authHeader));
+    if (hasError(response)) {
+      return new ResponseEntity<>(response.getBody(), HttpStatus.UNAUTHORIZED);
+    }
     return response.getBody();
 
   }
@@ -58,6 +62,9 @@ public class Oauth2ClientRestController {
     restTemplate.getInterceptors().add(new BasicAuthenticationInterceptor(tokenRequest.getClientId(),
       oauthClientDetailsConfig.getClientDetailsMap().get(tokenRequest.getClientId()).getClientSecret()));
     ResponseEntity<?> response = post(OauthClientUtils.preparePostParametersForRefreshTokenTypeGrant(tokenRequest.getRefreshToken()));
+    if (hasError(response)) {
+      return new ResponseEntity<>(response.getBody(), HttpStatus.UNAUTHORIZED);
+    }
     return response.getBody();
 
   }
@@ -72,5 +79,14 @@ public class Oauth2ClientRestController {
     response = this.restTemplate.postForEntity(oauthServerBaseUrl + "/token", request, Object.class);
 
     return response;
+  }
+
+  private boolean hasError(ResponseEntity response) {
+    return (response
+      .getStatusCode()
+      .series() == HttpStatus.Series.CLIENT_ERROR
+      || response
+        .getStatusCode()
+        .series() == HttpStatus.Series.SERVER_ERROR);
   }
 }
