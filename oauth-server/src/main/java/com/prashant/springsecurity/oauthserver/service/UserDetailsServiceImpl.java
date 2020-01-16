@@ -32,9 +32,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
   @Transactional(readOnly = true)
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     User user = userRepo.findByUsername(username);
-
-    return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
-      user.isEnabled(), true, true, true, getAuthorities(user.getRoles()));
+    if (null != user) {
+      return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
+        user.isEnabled(), true, true, true, getAuthorities(user.getRoles()));
+    }
+    return null;
   }
 
   private Collection<? extends GrantedAuthority> getAuthorities(Collection<Role> roles) {

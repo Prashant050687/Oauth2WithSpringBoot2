@@ -68,6 +68,7 @@ public class Oauth2ClientRestController {
 
     final HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(postParameters, headers);
     ResponseEntity<?> response;
+    this.restTemplate.setErrorHandler(new MyErrorHandler());
     response = this.restTemplate.postForEntity(oauthServerBaseUrl + "/token", request, Object.class);
 
     return response;

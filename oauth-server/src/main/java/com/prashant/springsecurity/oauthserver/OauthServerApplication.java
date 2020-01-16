@@ -11,7 +11,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EntityScan(basePackages = {"com.prashant.springsecurity.oauthserver.domain"})
 @EnableJpaRepositories(basePackages = "com.prashant.springsecurity.oauthserver.repo")
-@ComponentScan(basePackages = {"com.prashant.springsecurity"})
+@ComponentScan(basePackages = {"com.prashant.springsecurity.oauthserver"})
 public class OauthServerApplication {
 
   public static void main(String[] args) {
