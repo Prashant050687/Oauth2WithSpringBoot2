@@ -50,7 +50,7 @@ public class Oauth2ClientRestController {
       oauthClientDetailsConfig.getClientDetailsMap().get(tokenRequest.getClientId()).getClientSecret()));
     ResponseEntity<?> response = post(OauthClientUtils.preparePostParametersForPasswordTypeGrant(authHeader));
     if (hasError(response)) {
-      return new ResponseEntity<>(response.getBody(), HttpStatus.UNAUTHORIZED);
+      return new ResponseEntity<>(response.getBody(), response.getStatusCode());
     }
     return response.getBody();
 
@@ -63,7 +63,7 @@ public class Oauth2ClientRestController {
       oauthClientDetailsConfig.getClientDetailsMap().get(tokenRequest.getClientId()).getClientSecret()));
     ResponseEntity<?> response = post(OauthClientUtils.preparePostParametersForRefreshTokenTypeGrant(tokenRequest.getRefreshToken()));
     if (hasError(response)) {
-      return new ResponseEntity<>(response.getBody(), HttpStatus.UNAUTHORIZED);
+      return new ResponseEntity<>(response.getBody(), response.getStatusCode());
     }
     return response.getBody();
 
